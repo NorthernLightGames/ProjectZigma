@@ -1,4 +1,4 @@
-
+﻿
 
 ------------------------------------------------------------------------------
 Project Zigma
@@ -13,7 +13,9 @@ Fakta om Zigma
 
 Gravitation: 1.2 x Jordens
 
-Terräng: Stora oceaner och mycket kargt och bergigt; Nästan hela planetens yta täcks av mystiska hexagonstaplar; Det finns även områden med gejsrar och vulkaner där det inte finns hexagoner;
+Terräng: Stora oceaner och mycket kargt och bergigt; Nästan hela planetens yta täcks av mystiska hexagonstaplar; 
+
+Det finns även områden med gejsrar och vulkaner där det inte finns hexagoner;
 
 Väder: Ofta mulet; dimma; Ofta regn och blixtar; Blåsigt;
 
@@ -55,4 +57,6 @@ Spelarna består av två tjejer och två killar.
 Handling
 
 En liten grupp forskare från Jorden har åkt till ett fjärran solsystem där en planet som tycks vara beboelig ligger. 
-4 ur besättningen landar med en liten skyttel på en ö vid kusten av fastlandet. 
+Fyra ur besättningen landar med en liten skyttel på en ö vid kusten av fastlandet.
+Dem märker direkt att någonting är fel på planeten efter att dem ser alla hexagonstrukturer i marken på planeten.
+

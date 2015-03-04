@@ -58,5 +58,5 @@ Handling
 
 En liten grupp forskare från Jorden har åkt till ett fjärran solsystem där en planet som tycks vara beboelig ligger. 
 Fyra ur besättningen landar med en liten skyttel på en ö vid kusten av fastlandet.
-Dem märker direkt att någonting är fel på planeten efter att dem ser alla hexagonstrukturer i marken på planeten.
+Dem märker direkt att någonting är fel på planeten efter att dem ser alla hexagonstrukturer i marken.
 

@@ -1,3 +1,4 @@
+﻿
 
 
 ------------------------------------------------------------------------------
@@ -56,3 +57,7 @@ Handling
 
 En liten grupp forskare från Jorden har åkt till ett fjärran solsystem där en planet som tycks vara beboelig ligger. 
 4 ur besättningen landar med en liten skyttel på en ö vid kusten av fastlandet. 
+
+
+
+

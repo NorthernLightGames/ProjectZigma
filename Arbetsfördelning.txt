@@ -1,8 +1,8 @@
-ï»¿
+
 
 --------------------------------
 
-       ArbetsfÃ¶rdelning 
+       Arbetsfördelning 
 
 --------------------------------
 
@@ -15,7 +15,7 @@
  - Petter
 
 
-| LÃ¤r oss andra UnrealEngine
+| Lär oss andra UnrealEngine
  - Gustav
 
 

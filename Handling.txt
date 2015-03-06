@@ -57,4 +57,8 @@ Handling
 
 En liten grupp forskare från Jorden har åkt till ett fjärran solsystem där en planet som tycks vara beboelig ligger. 
 Fyra ur besättningen landar med en liten skyttel på en ö vid kusten av fastlandet.
-Dem märker direkt att någonting är fel på planeten efter att dem ser alla hexagonstrukturer i marken.
+Dem märker direkt att någonting är fel på planeten efter att dem ser alla hexagonstaplar i marken.
+Datorn kraschar så att alla haxagonstaplar på planeten kollapsar. Detta leder till att Zigma förstörs.
+Rebellerna som bor kvar på planeten är inte så glada över att mänskligheten vill kolonisera den.
+Rebellerna bor i barrackliknande byggnader under marken.
+Större delen av populationen håller på att fly planeten i ett gigantiskt moderskepp.

@@ -1,0 +1,64 @@
+﻿
+------------------------------------------------------------------------------
+Project Zigma
+------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------
+
+Fakta om Zigma
+
+Gravitation: 1.2 x Jordens
+
+Terräng: Stora oceaner och mycket kargt och bergigt; Nästan hela planetens yta täcks av mystiska hexagonstaplar; 
+
+Det finns även områden med gejsrar och vulkaner där det inte finns hexagoner;
+
+Väder: Ofta mulet; dimma; Ofta regn och blixtar; Blåsigt;
+
+Atmosfär: 30% syre; 60% kväve och 10% övriga gaser; Upplevs som mycket behaglig;
+
+Liv: Alger i haven och längs kusterna; Gamla förvildade energiskogar; Stora djur, dock inte så många; 
+
+Månar: 1 lika stor som vår måne och en liten; orsakar tidvatten;
+
+Sol: 70% av vår sols massa; Zigma ligger närmare sin stjärna;
+
+Dygnslängd: 41h och 19min
+
+Årslängd: 170 Zigma-dygn;
+
+------------------------------------------------------------------------------
+
+Fakta om datorn och dess hexagoner
+
+Hexagonerna: 
+{
+Svarta; 
+yta:”Frosted glass”; 
+Neon-blå-vitt ljus när de är aktiva;
+Verkar vara elektriska;
+Sänder ut elektromagnetiskt brus som stör radiosignaler;
+}
+
+------------------------------------------------------------------------------
+
+Fakta om karakaktärerna och skeppen
+
+Moderskeppet som ligger i omloppsbana runt Zigma kallas för Tellus. Där heter kaptenen Hailin Hsü (Kapten H).
+
+Spelarna består av två tjejer och två killar.
+
+------------------------------------------------------------------------------
+
+Handling
+
+En liten grupp forskare från Jorden har åkt till ett fjärran solsystem där en planet som tycks vara beboelig ligger. 
+Fyra ur besättningen landar med en liten skyttel på en ö vid kusten av fastlandet.
+Dem märker direkt att någonting är fel på planeten efter att dem ser alla hexagonstaplar i marken.
+Datorn kraschar så att alla haxagonstaplar på planeten kollapsar. Detta leder till att Zigma förstörs.
+Rebellerna som bor kvar på planeten är inte så glada över att mänskligheten vill kolonisera den.
+Rebellerna bor i barrackliknande byggnader under marken.
+Större delen av populationen håller på att fly planeten i ett gigantiskt moderskepp.

@@ -1,0 +1,34 @@
+﻿
+
+--------------------------------
+
+       Arbetsfördelning 
+
+--------------------------------
+
+
+| Ljud
+ - Julian
+
+
+| Animering
+ - Petter
+
+
+| Lär oss andra UnrealEngine
+ - Gustav
+
+
+| Skisser
+ - Marcus
+
+
+| Programmering, scripter och blueprint eller vad det heter
+ - Valdemar
+
+
+| Zigma-Font
+ - Valdemar
+
+
+--------------------------------

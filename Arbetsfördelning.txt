@@ -18,7 +18,10 @@
 | Skisser
  - Marcus
 
+
 | Modellering
+ - Petter
+ - Marcus
 
 
 | Programmering: C++
@@ -26,7 +29,6 @@
 
 
 | BluePrint script
- 
-
+ - Gustav
 
 --------------------------------

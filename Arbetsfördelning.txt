@@ -15,20 +15,18 @@
  - Petter
 
 
-| Lär oss andra UnrealEngine
- - Gustav
-
-
 | Skisser
  - Marcus
 
+| Modellering
 
-| Programmering, scripter och blueprint eller vad det heter
+
+| Programmering: C++
  - Valdemar
 
 
-| Zigma-Font
- - Valdemar
+| BluePrint script
+ 
 
 
 --------------------------------

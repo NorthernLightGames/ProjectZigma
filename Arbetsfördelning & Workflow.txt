@@ -17,7 +17,7 @@
  - Gustav
 
 
-| Animeringar
+| Animering
  - Petter
  - Marcus
 
@@ -25,7 +25,6 @@
 | Användargränssnitt
  - Valdemar
  - Marcus
- - Julian
 
 
 | Landskap och Actors
@@ -36,15 +35,21 @@
 
 | AI
  - Valdemar
- - Gustav
 
 
 | Textures
  - Valdemar
+ - Petter
 
 
 | Spelsystem (C++)
  - Valdemar
+
+
+| Skripter (BluePrint)
+ - Marcus
+ - Gustav
+
 
 
 --------------------------------

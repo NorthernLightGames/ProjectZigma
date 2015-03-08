@@ -9,27 +9,56 @@
 
 | Ljud
  - Julian
+ - Gustav
 
 
-| Animering
+| 3D-modeller
  - Petter
+ - Gustav
 
 
-| Skisser
- - Marcus
-
-
-| Modellering
+| Animeringar
  - Petter
  - Marcus
 
 
-| Programmering: C++
+| Användargränssnitt
+ - Valdemar
+ - Marcus
+ - Julian
+
+
+| Landskap och Actors
+ - Marcus
+ - Valdemar
+ - Julian
+
+
+| AI
+ - Valdemar
+ - Gustav
+
+
+| Textures
  - Valdemar
 
 
-| BluePrint script
- - Gustav
- - Julian
+| Spelsystem (C++)
+ - Valdemar
+
+
+--------------------------------
+
+	Workflow
+
+--------------------------------
+
+
+Först utarbetar vi en ny del i spelet, alltså en ny scen. Vi skriver
+ner exakt vilka objekt som finns i scenen. Försöker beskriva allting
+så detaljerat som möjligt. Sedan gör vi alla objekt som behövs till 
+scenen. När alla objekt är färdiga kan man börja jobba på scenen, alltså
+forma terrängen, skapa alla Actors och placera ut dem i scenen.
+
 
 --------------------------------

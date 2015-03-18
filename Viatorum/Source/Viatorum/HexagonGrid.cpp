@@ -56,8 +56,8 @@ void UHexagonGrid::CreateHexagons() {
 
 	FString name;
 	UHexagon* hexagon;
-	float x;
-	float y;
+
+	float x, y, z;
 	for (int32 i = 0; i < 10; i++)
 	for (int32 j = 0; j < 10; j++) {
 
@@ -68,6 +68,8 @@ void UHexagonGrid::CreateHexagons() {
 
 		hexagon = NewNamedObject<UHexagon>(this, FName(*name));
 
+		z = GetZPosition(x, y);
+
 		hexagon->SetRelativeLocation(FVector(x, y, 0.f));
 		hexagon->AttachTo(this, FName(*name), EAttachLocation::KeepRelativeOffset);
 
@@ -75,4 +77,8 @@ void UHexagonGrid::CreateHexagons() {
 
 		index++;
 	}
+}
+
+float UHexagonGrid::GetZPosition(float x, float y) {
+	return 0;
 }

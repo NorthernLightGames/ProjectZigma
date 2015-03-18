@@ -31,6 +31,8 @@ public:
 	
 private:
 
+	float GetZPosition(float x, float y);
+
 	void RegisterHexagons();
 
 	void CreateHexagons();

@@ -23,15 +23,7 @@ public:
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Grid Config")
-	void ConstructGrid();
-
-	UPROPERTY()
-		TArray<UHexagon*> Hexagons;
-	
 private:
-
-	void RegisterHexagons();
 
 	void CreateHexagons();
 };

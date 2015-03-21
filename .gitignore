@@ -1,8 +1,10 @@
-﻿# Viatorum
+# Viatorum
 /Viatorum/Binaries
 /Viatorum/DerivedDataCache
 /Viatorum/Intermediate
 /Viatorum/Saved
 /Viatorum/**/*.sdf
 /Viatorum/**/*.suo
+/Viatorum/**/*.opensdf
 Thumbs.db
+

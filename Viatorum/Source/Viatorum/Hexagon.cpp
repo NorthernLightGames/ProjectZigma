@@ -20,9 +20,9 @@ UHexagon::UHexagon()
 		HexagonMesh = MeshOb.Object;
 	}
 
-	Mesh = NewNamedObject<UStaticMeshComponent>(this, FName("Mesh"));
-	Mesh->AttachTo(this, NAME_None, EAttachLocation::KeepRelativeOffset);
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mesh"));
 	Mesh->SetStaticMesh(HexagonMesh);
+	Mesh->AttachTo(this, FName("Mesh"));
 }
 
 
@@ -32,8 +32,6 @@ void UHexagon::InitializeComponent()
 	Super::InitializeComponent();
 
 	// ...
-	Mesh->AttachParent = this;
-	Mesh->RegisterComponent();
 }
 
 

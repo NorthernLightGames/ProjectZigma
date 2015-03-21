@@ -23,7 +23,6 @@ void UHexagonGrid::InitializeComponent()
 	Super::InitializeComponent();
 
 	// ...
-	RegisterHexagons();
 }
 
 
@@ -35,22 +34,7 @@ void UHexagonGrid::TickComponent( float DeltaTime, ELevelTick TickType, FActorCo
 	// ...
 }
 
-void UHexagonGrid::ConstructGrid() {
-	CreateHexagons();
-	RegisterHexagons();
-}
-
-void UHexagonGrid::RegisterHexagons() {
-	UHexagon* hexagon;
-	for (int32 i = 0; i < Hexagons.Num(); i++) {
-		hexagon = Hexagons[i];
-		hexagon->AttachParent = this;
-		hexagon->RegisterComponent();
-	}
-}
-
 void UHexagonGrid::CreateHexagons() {
-	Hexagons.Empty();
 
 	int32 index = 0;
 
@@ -66,12 +50,11 @@ void UHexagonGrid::CreateHexagons() {
 
 		name = FString::Printf(TEXT("Hexagon Mesh %i"), index);
 
-		hexagon = NewNamedObject<UHexagon>(this, FName(*name));
+		hexagon = CreateDefaultSubobject<UHexagon>(FName(*name));
+
+		hexagon->AttachTo(this, FName(*name));
 
 		hexagon->SetRelativeLocation(FVector(x, y, 0.f));
-		hexagon->AttachTo(this, FName(*name), EAttachLocation::KeepRelativeOffset);
-
-		Hexagons.Add(hexagon);
 
 		index++;
 	}

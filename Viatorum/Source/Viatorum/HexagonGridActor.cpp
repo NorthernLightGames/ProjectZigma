@@ -10,15 +10,14 @@ AHexagonGridActor::AHexagonGridActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	UHexagonGrid* hexagonGrid = NewNamedObject<UHexagonGrid>(this, FName("Grid"));
-	RootComponent = hexagonGrid;
+	Grid = CreateDefaultSubobject<UHexagonGrid>(FName("RootComponent"));
+	RootComponent = Grid;
 }
 
 // Called when the game starts or when spawned
 void AHexagonGridActor::BeginPlay()
 {
 	Super::BeginPlay();
-	RootComponent->RegisterComponent();
 }
 
 // Called every frame

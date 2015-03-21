@@ -13,7 +13,7 @@ class VIATORUM_API UHexagon : public USceneComponent
 
 public:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hexagon Mesh")
+	UPROPERTY()
 	UStaticMeshComponent* Mesh;
 
 	// Sets default values for this component's properties

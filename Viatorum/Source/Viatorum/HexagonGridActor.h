@@ -11,7 +11,8 @@ class VIATORUM_API AHexagonGridActor : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+
 	// Sets default values for this actor's properties
 	AHexagonGridActor();
 
@@ -20,4 +21,7 @@ public:
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
+
+	UPROPERTY()
+	UHexagonGrid* Grid;
 };

@@ -28,4 +28,8 @@ public:
 	void MoveRight(float Val);
 
 	void Turn(float Val);
+
+	void LookUp(float Val);
+
+	UCameraComponent* Camera;
 };

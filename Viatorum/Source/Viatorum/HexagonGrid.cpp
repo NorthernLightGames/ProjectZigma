@@ -8,6 +8,7 @@ AHexagonGrid::AHexagonGrid():
 XSize(10), YSize(10), XScale(80.5f), YScale(91.f), 
 Mesh(ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/Models/Hexagon")).Object) {
 	PrimaryActorTick.bCanEverTick = true;
+	this->bCanBeDamaged = false;
 	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(FName("DefaultSceneRoot"));
 	this->SetRootComponent(root);
 }

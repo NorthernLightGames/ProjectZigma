@@ -3,16 +3,17 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "HexagonGrid.generated.h"
+#include "HexagonGridComponent.h"
+#include "HexGrid.generated.h"
 
 UCLASS()
-class VIATORUM_API AHexagonGrid : public AActor
+class VIATORUM_API AHexGrid : public AActor
 {
 	GENERATED_BODY()
 	
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid Config", 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid Config",
 			  meta = (DisplayName = "X size", ClampMin = "1", ClampMax = "100", UIMin = "1", UIMax = "100"))
 	int32 XSize;
 
@@ -28,31 +29,25 @@ public:
 			  meta = (DisplayName = "Y scale", ClampMin = "1", ClampMax = "1000", UIMin = "1", UIMax = "1000"))
 	float YScale;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid Config",
-			  meta = (DisplayName = "Mesh"))
-	UStaticMesh* Mesh;
+	// Sets default values for this actor's properties
+	AHexGrid();
 
-	AHexagonGrid();
-
+	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	virtual void Tick(float DeltaSeconds) override;
-
-	virtual void OnConstruction(const FTransform& Transform) override;
+	// Called every frame
+	virtual void Tick( float DeltaSeconds ) override;
 
 #ifdef WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	virtual void PostEditMove(bool bFinished) override;
 #endif
 
-	
 private:
 
-	TArray<UStaticMeshComponent*> Hexagons;
-
-	void ComputeLocations();
-
-	void ConstructGrid();
-
 	float CalculateZ(float x, float y, float z_start, float z_end);
+
+	void UpdateGrid();
+
+	UHexagonGridComponent* Grid;
 };

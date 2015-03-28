@@ -5,7 +5,7 @@
 
 
 AHexagonGrid::AHexagonGrid():
-XSize(10), YSize(10), XScale(80.5f), YScale(91.f), 
+XSize(10), YSize(10), XScale(161.f), YScale(182.f), 
 Mesh(ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/Models/Hexagon")).Object) {
 	PrimaryActorTick.bCanEverTick = true;
 	this->bCanBeDamaged = false;
@@ -15,6 +15,7 @@ Mesh(ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/Models/Hexagon")
 
 void AHexagonGrid::BeginPlay(){
 	Super::BeginPlay();
+	ConstructGrid();
 }
 
 void AHexagonGrid::Tick( float DeltaTime ){
@@ -46,12 +47,13 @@ void AHexagonGrid::ComputeLocations() {
 	for (int32 i = 0; i < _xsize; i++) {
 		for (int32 j = 0; j < _ysize; j++) {
 
-			element = RootComponent->GetChildComponent((i*_ysize) + j);
+			element = Hexagons[j + i*_ysize];
+
 			if (element == nullptr) continue;
 
-			y = ((j - 0.5f * _ysize) * 0.75 * _yscale);
-			x = ((i - 0.5f * _xsize) * _xscale + (j % 2) * 0.5f * _xscale);
-			z = CalculateZ(x + actor_location.Y, y + actor_location.X, actor_location.Z + 1000, actor_location.Z - 1000) - actor_location.Z;
+			y = (j - 0.5f * _ysize) * 0.75 * _yscale;
+			x = (i - 0.5f * _xsize) * _xscale + (j % 2) * 0.5f * _xscale;
+			z = CalculateZ(x + actor_location.X, y + actor_location.Y, actor_location.Z + 1000, actor_location.Z - 1000) - actor_location.Z;
 
 			element_location = FVector(x, y, z);
 
@@ -63,9 +65,10 @@ void AHexagonGrid::ComputeLocations() {
 void AHexagonGrid::ConstructGrid() {
 
 	// Clear grid
-	for (int32 i = 0; i < RootComponent->GetNumChildrenComponents(); i++) {
-		RootComponent->GetChildComponent(i)->DestroyComponent();
+	for (int32 i = 0; i < Hexagons.Num(); i++) {
+		Hexagons[i]->DestroyComponent();
 	}
+	Hexagons.Empty();
 
 	// Store properties as local constants
 	const int32 _xsize = XSize;
@@ -89,15 +92,17 @@ void AHexagonGrid::ConstructGrid() {
 
 			y = (j - 0.5f * _ysize) * 0.75 * _yscale;
 			x = (i - 0.5f * _xsize) * _xscale + (j % 2) * 0.5f * _xscale;
-			z = CalculateZ(x + actor_location.X, y + actor_location.Y, actor_location.Z + 1000, actor_location.Z - 1000);
+			z = CalculateZ(x + actor_location.X, y + actor_location.Y, actor_location.Z + 1000, actor_location.Z - 1000) - actor_location.Z;
 
-			element_location = FVector(x, y, z - actor_location.Z);
+			element_location = FVector(x, y, z);
 
 			element = NewObject<UStaticMeshComponent> (this);
 			element->SetRelativeLocation(element_location);
 			element->SetStaticMesh(mesh);
 			element->AttachTo(this->RootComponent);
 			element->RegisterComponent();
+
+			Hexagons.Add(element);
 		}
 	}
 }
@@ -132,19 +137,18 @@ float AHexagonGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 }
 
 #ifdef WITH_EDITOR
-void AHexagonGrid::PostEditChangeProperty(FPropertyChangedEvent& evt) {
-	/**
-	FName PropertyName = (evt.Property != NULL) ? evt.Property->GetFName() : NAME_None;
 
-	if ((PropertyName == GET_MEMBER_NAME_CHECKED(AHexagonGrid, XSize) || PropertyName == GET_MEMBER_NAME_CHECKED(AHexagonGrid, YSize))) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ConstructGrid() called"));
+void AHexagonGrid::PostEditMove(bool bFinished) {
+	ComputeLocations();
+}
+
+void AHexagonGrid::PostEditChangeProperty(FPropertyChangedEvent& evt) {
+	if (evt.Property->GetName().Equals(TEXT("XSize")) || evt.Property->GetName().Equals(TEXT("YSize"))) {
 		ConstructGrid();
 	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ComputeLocations() called"));
+	else if (evt.Property->GetName().Equals(TEXT("XScale")) || evt.Property->GetName().Equals(TEXT("YScale"))) {
 		ComputeLocations();
 	}
-	*/
-	ConstructGrid();
 }
+
 #endif

@@ -27,9 +27,9 @@ public:
 
 	void MoveRight(float Val);
 
-	void Turn(float Val);
+	void BeginJump();
 
-	void LookUp(float Val);
+	void EndJump();
 
 	UCameraComponent* Camera;
 };

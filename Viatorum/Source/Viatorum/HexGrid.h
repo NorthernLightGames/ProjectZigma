@@ -3,8 +3,9 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "HexagonGridComponent.h"
+#include "Hexagon.h"
 #include "HexGrid.generated.h"
+
 
 UCLASS()
 class VIATORUM_API AHexGrid : public AActor
@@ -12,22 +13,6 @@ class VIATORUM_API AHexGrid : public AActor
 	GENERATED_BODY()
 	
 public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid Config",
-			  meta = (DisplayName = "X size", ClampMin = "1", ClampMax = "100", UIMin = "1", UIMax = "100"))
-	int32 XSize;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid Config",
-			  meta = (DisplayName = "Y size", ClampMin = "1", ClampMax = "100", UIMin = "1", UIMax = "100"))
-	int32 YSize;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid Config",
-			  meta = (DisplayName = "X scale", ClampMin = "1", ClampMax = "1000", UIMin = "1", UIMax = "1000"))
-	float XScale;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grid Config",
-			  meta = (DisplayName = "Y scale", ClampMin = "1", ClampMax = "1000", UIMin = "1", UIMax = "1000"))
-	float YScale;
 
 	// Sets default values for this actor's properties
 	AHexGrid();
@@ -38,16 +23,20 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
-#ifdef WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	UInstancedStaticMeshComponent* GetHexagonComponentByType(EHexagonType Type);
+	
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(FPropertyChangedEvent & PropertyChangedEvent) override;
+
 	virtual void PostEditMove(bool bFinished) override;
 #endif
 
 private:
 
-	float CalculateZ(float x, float y, float z_start, float z_end);
+	float CalculateZ(float X, float Y, float Z_start, float Z_end);
 
 	void UpdateGrid();
 
-	UHexagonGridComponent* Grid;
+	UInstancedStaticMeshComponent* Hexagons_default;
+	
 };

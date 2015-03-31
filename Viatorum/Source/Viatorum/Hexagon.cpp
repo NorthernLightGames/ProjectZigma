@@ -3,10 +3,6 @@
 #include "Viatorum.h"
 #include "Hexagon.h"
 
-Hexagon::Hexagon()
-{
-}
 
-Hexagon::~Hexagon()
-{
-}
+
+

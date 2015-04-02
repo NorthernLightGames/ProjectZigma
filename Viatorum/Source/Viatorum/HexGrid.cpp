@@ -20,7 +20,7 @@ AHexGrid::AHexGrid()
 	Hexagons_default->SetStaticMesh(Mesh);
 	Hexagons_default->AttachTo(RootComponent, "Default Hexagons");
 
-	UpdateGrid();
+	//UpdateGrid();
 
 }
 
@@ -38,7 +38,8 @@ void AHexGrid::Tick( float DeltaTime )
 
 }
 
-void AHexGrid::UpdateGrid() {
+/*
+void AHexGrid::ConstructGrid() {
 	Hexagons_default->ClearInstances();
 
 	const int32 _xsize = 50;
@@ -61,6 +62,78 @@ void AHexGrid::UpdateGrid() {
 			Hexagons_default->AddInstance(Instance_transform);
 		}
 	}
+}
+*/
+
+
+UInstancedStaticMeshComponent* AHexGrid::GetHexMeshComponent(EHexagonType Type) {
+
+	switch (Type) {
+	case EHexagonType::HE_Default:
+		return Hexagons_default;
+	default:
+		return nullptr;
+	}
+}
+
+void AHexGrid::ClearGrid() {
+	Hexagons_default->ClearInstances();
+	for (int32 i = 0; i < Hexagons.Num(); i++) {
+		Hexagons[i].ArrayIndex = -1;
+	}
+}
+
+void AHexGrid::UpdateGrid() {
+	const FVector ActorLoc = this->GetActorLocation();
+
+	FHexagon Hex;
+	FVector Loc;
+	UInstancedStaticMeshComponent* Comp;
+	for (int32 i = 0; i < Hexagons.Num(); i++) {
+		Hex = Hexagons[i];
+
+		// If move to ground
+		Loc = Hex.Transform.GetLocation() + ActorLoc;
+		Loc.Z = CalculateZ(Loc.X, Loc.Y, ActorLoc.Z + 1000, ActorLoc.Z - 1000) - ActorLoc.Z;
+		Hex.Transform.SetLocation(Loc);
+		// end if
+
+		Comp = GetHexMeshComponent(Hex.Type);
+		if (Comp == nullptr) continue;
+
+		if (Hex.ArrayIndex < 0) {
+			Hex.ArrayIndex = Comp->AddInstance(Hex.Transform);
+		}
+		else {
+			Comp->UpdateInstanceTransform(Hex.ArrayIndex, Hex.Transform);
+		}
+
+		Hexagons[i] = Hex;
+	}
+}
+
+void AHexGrid::UpdateHexagon(int32 Index) {
+
+	FHexagon Hex = Hexagons[Index];
+
+	// If move to ground
+	const FVector ActorLoc = this->GetActorLocation();
+	FVector Loc = Hex.Transform.GetLocation() + ActorLoc;
+	Loc.Z = CalculateZ(Loc.X, Loc.Y, ActorLoc.Z + 1000, ActorLoc.Z - 1000) - ActorLoc.Z;
+	Hex.Transform.SetLocation(Loc);
+	// end if
+
+	UInstancedStaticMeshComponent* Comp = GetHexMeshComponent(Hex.Type);
+	if (Comp == nullptr) return;
+
+	if (Hex.ArrayIndex < 0) {
+		Hex.ArrayIndex = Comp->AddInstance(Hex.Transform);
+	}
+	else {
+		Comp->UpdateInstanceTransform(Hex.ArrayIndex, Hex.Transform);
+	}
+
+	Hexagons[Index] = Hex;
 }
 
 float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
@@ -93,23 +166,60 @@ float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 }
 
 
-UInstancedStaticMeshComponent* AHexGrid::GetHexagonComponentByType(EHexagonType Type) {
+#if WITH_EDITOR
 
-	switch (Type) {
-	case EHexagonType::HE_Default:
-		return Hexagons_default;
+void AHexGrid::PostEditChangeChainProperty(FPropertyChangedChainEvent & Event) {
+	Super::PostEditChangeChainProperty(Event);
+
+	int32 ArrayIndex = Event.GetArrayIndex(TEXT("Hexagons"));
+
+	switch (Event.ChangeType) {
+	case EPropertyChangeType::ValueSet:
+		UpdateHexagon(ArrayIndex);
+		break;
+	case EPropertyChangeType::ArrayAdd:
+		UpdateHexagon(ArrayIndex);
+		break;
 	default:
-		return nullptr;
+		ClearGrid();
+		UpdateGrid();
+		break;
 	}
 }
 
-#if WITH_EDITOR
-
+/*
 void AHexGrid::PostEditChangeProperty(FPropertyChangedEvent & Evt) {
 	UpdateGrid();
 }
+*/
 
 void AHexGrid::PostEditMove(bool bFinished) {
 	UpdateGrid();
 }
 #endif
+
+void AHexGrid::AddHexagon(FHexagon& Hexagon) {
+	UpdateHexagon(Hexagons.Add(Hexagon));
+}
+
+FHexagon AHexGrid::GetHexagon(int32 Index) {
+	return Hexagons[Index];
+}
+
+void AHexGrid::RemoveHexagon(int32 Index) {
+	FHexagon Hex = Hexagons[Index];
+	Hexagons.RemoveAt(Index);
+	if (Hex.ArrayIndex < 0) return;
+	UInstancedStaticMeshComponent* Comp = GetHexMeshComponent(Hex.Type);
+	if (Comp == nullptr) return;
+	Comp->RemoveInstance(Hex.ArrayIndex);
+}
+
+void AHexGrid::EditHexagon(int32 Index, FHexagon& Hexagon) {
+	Hexagons[Index] = Hexagon;
+	UpdateHexagon(Index);
+}
+
+void AHexGrid::ClearHexagons() {
+	Hexagons.Empty();
+}

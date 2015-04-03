@@ -4,6 +4,22 @@
 #include "HexGrid.h"
 
 
+FHexagon::FHexagon():
+Transform(),
+Type(EHexagonType::HE_Default),
+ArrayIndex(-1)
+{
+
+}
+
+FHexagon::FHexagon(FTransform & Transform, EHexagonType Type):
+Transform(Transform),
+Type(Type),
+ArrayIndex(-1)
+{
+
+}
+
 // Sets default values
 AHexGrid::AHexGrid()
 {
@@ -93,7 +109,7 @@ void AHexGrid::UpdateGrid() {
 		Hex = Hexagons[i];
 
 		// If move to ground
-		Loc = Hex.Transform.GetLocation() + ActorLoc;
+		Loc = Hex.Transform.GetLocation();
 		Loc.Z = CalculateZ(Loc.X, Loc.Y, ActorLoc.Z + 1000, ActorLoc.Z - 1000) - ActorLoc.Z;
 		Hex.Transform.SetLocation(Loc);
 		// end if
@@ -113,12 +129,13 @@ void AHexGrid::UpdateGrid() {
 }
 
 void AHexGrid::UpdateHexagon(int32 Index) {
+	if (Index < 0) return;
 
 	FHexagon Hex = Hexagons[Index];
 
 	// If move to ground
 	const FVector ActorLoc = this->GetActorLocation();
-	FVector Loc = Hex.Transform.GetLocation() + ActorLoc;
+	FVector Loc = Hex.Transform.GetLocation();
 	Loc.Z = CalculateZ(Loc.X, Loc.Y, ActorLoc.Z + 1000, ActorLoc.Z - 1000) - ActorLoc.Z;
 	Hex.Transform.SetLocation(Loc);
 	// end if
@@ -169,22 +186,28 @@ float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 #if WITH_EDITOR
 
 void AHexGrid::PostEditChangeChainProperty(FPropertyChangedChainEvent & Event) {
-	Super::PostEditChangeChainProperty(Event);
 
-	int32 ArrayIndex = Event.GetArrayIndex(TEXT("Hexagons"));
+	if(Event.MemberProperty->GetName().Equals("Hexagons"))
+	{
 
-	switch (Event.ChangeType) {
-	case EPropertyChangeType::ValueSet:
-		UpdateHexagon(ArrayIndex);
-		break;
-	case EPropertyChangeType::ArrayAdd:
-		UpdateHexagon(ArrayIndex);
-		break;
-	default:
-		ClearGrid();
-		UpdateGrid();
-		break;
+		switch (Event.ChangeType) {
+
+		case EPropertyChangeType::ValueSet:
+		case EPropertyChangeType::ArrayAdd: {
+
+			int32 index = Event.GetArrayIndex(TEXT("Hexagons"));
+			UE_LOG(LogClass, Log, TEXT("PropertyChain index %d"), index);
+			UpdateHexagon(index);
+		} break;
+
+		default:
+			ClearGrid();
+			UpdateGrid();
+			break;
+		}
 	}
+
+	Super::PostEditChangeChainProperty(Event);
 }
 
 /*

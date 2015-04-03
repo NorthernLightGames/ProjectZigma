@@ -23,6 +23,10 @@ struct FHexagon {
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon")
 	EHexagonType Type;
 
+	FHexagon();
+
+	FHexagon(FTransform & Transform, EHexagonType Type);
+
 private:
 
 	UPROPERTY()

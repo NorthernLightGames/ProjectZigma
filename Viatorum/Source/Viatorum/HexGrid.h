@@ -26,13 +26,6 @@ struct FHexagon {
 	FHexagon();
 
 	FHexagon(FTransform & Transform, EHexagonType Type);
-
-private:
-
-	UPROPERTY()
-	int32 ArrayIndex;
-
-	friend class AHexGrid;
 };
 
 UCLASS()
@@ -43,7 +36,7 @@ class VIATORUM_API AHexGrid : public AActor
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HexGrid")
-		TArray<FHexagon> Hexagons;
+	TArray<FHexagon> Hexagons;
 
 public:
 
@@ -56,11 +49,19 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
-	void AddHexagon(FHexagon& Hex);
+	virtual void PostInitProperties() override;
+
+#if WITH_EDITOR
+	virtual void PostEditChangeChainProperty(FPropertyChangedChainEvent & Event) override;
+
+	virtual void PostEditMove(bool bFinished) override;
+#endif
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
-	FHexagon GetHexagon(int32 Index);
+	void AddHexagon(FHexagon Hex);
+
+	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
+	void GetHexagon(FHexagon& Hex, int32 Index);
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
 	void RemoveHexagon(int32 Index);
@@ -71,26 +72,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
 	void ClearHexagons();
 
-#if WITH_EDITOR
-	virtual void PostEditChangeChainProperty(FPropertyChangedChainEvent & Event) override;
-
-	//virtual void PostEditChangeProperty(FPropertyChangedEvent & Event) override;
-
-	virtual void PostEditMove(bool bFinished) override;
-#endif
-
-private:
-
-	void ClearGrid();
+	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid", meta = (FriendlyName = "UpdateGrid"))
+	void UFunction_UpdateGrid();
 
 	void UpdateGrid();
 
-	void UpdateHexagon(int32 Index);
+private:
 
 	float CalculateZ(float X, float Y, float Z_start, float Z_end);
 
 	UInstancedStaticMeshComponent* GetHexMeshComponent(EHexagonType Type);
 
 	UInstancedStaticMeshComponent* Hexagons_default;
+
+	void ClearInstances();
 	
 };

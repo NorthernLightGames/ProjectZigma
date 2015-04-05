@@ -35,10 +35,22 @@ class VIATORUM_API AHexGrid : public AActor
 	
 protected:
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HexGrid")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hexagon Grid")
 	TArray<FHexagon> Hexagons;
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon Grid", meta = (UIMin = 100.f, UIMax = 100000.f, ClampMax = 10000.f))
+		float TraceDistanceDown;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon Grid", meta = (UIMin = 100.f, UIMax = 100000.f, ClampMax = 10000.f))
+		float TraceDistanceUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon Grid", meta = (DisplayName = "Stick to ground"))
+		bool bStickToGround;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon Grid", meta = (UIMin = -10000.f, UIMax = 10000.f))
+		float FlyHeight;
 
 	// Sets default values for this actor's properties
 	AHexGrid();
@@ -52,9 +64,13 @@ public:
 	virtual void PostInitProperties() override;
 
 #if WITH_EDITOR
+
 	virtual void PostEditChangeChainProperty(FPropertyChangedChainEvent & Event) override;
 
 	virtual void PostEditMove(bool bFinished) override;
+
+	virtual void PostEditChangeProperty(FPropertyChangedEvent & Event) override;
+
 #endif
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
@@ -67,23 +83,19 @@ public:
 	void RemoveHexagon(int32 Index);
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
-	void EditHexagon(int32 Index, FHexagon& Hex);
+	void EditHexagon(int32 Index, FHexagon Hex);
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
 	void ClearHexagons();
 
-	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid", meta = (FriendlyName = "UpdateGrid"))
-	void UFunction_UpdateGrid();
-
+	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
 	void UpdateGrid();
 
 private:
 
 	float CalculateZ(float X, float Y, float Z_start, float Z_end);
 
-	UInstancedStaticMeshComponent* GetHexMeshComponent(EHexagonType Type);
-
-	UInstancedStaticMeshComponent* Hexagons_default;
+	TMap<uint8, UInstancedStaticMeshComponent*> HexagonContainers;
 
 	void ClearInstances();
 	

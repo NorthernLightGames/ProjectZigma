@@ -19,7 +19,11 @@ Type(Type)
 }
 
 // Sets default values
-AHexGrid::AHexGrid()
+AHexGrid::AHexGrid():
+bStickToGround(true),
+FlyHeight(10.f),
+TraceDistanceUp(1000.f),
+TraceDistanceDown(1000.f)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -29,13 +33,16 @@ AHexGrid::AHexGrid()
 
 
 	// Default hexagons component
-	Hexagons_default = CreateDefaultSubobject<UInstancedStaticMeshComponent>("Hexagons");
-	UStaticMesh* Mesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/Models/Hexagon")).Object;
-	Hexagons_default->SetStaticMesh(Mesh);
-	Hexagons_default->AttachTo(RootComponent, "Default Hexagons");
 
-	//UpdateGrid();
+	UStaticMesh* HexagonMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/Models/HexMesh")).Object;
 
+	UInstancedStaticMeshComponent* HexagonContainer;
+
+	// For each in EHexagonType
+	HexagonContainer = CreateDefaultSubobject<UInstancedStaticMeshComponent>("Default Hexagons");
+	HexagonContainer->SetStaticMesh(HexagonMesh);
+	HexagonContainer->AttachTo(RootComponent, TEXT("Default Hexagons"));
+	HexagonContainers.Add((uint8)EHexagonType::HE_Default, HexagonContainer);
 }
 
 // Called when the game starts or when spawned
@@ -52,18 +59,10 @@ void AHexGrid::Tick( float DeltaTime )
 
 }
 
-UInstancedStaticMeshComponent* AHexGrid::GetHexMeshComponent(EHexagonType Type) {
-
-	switch (Type) {
-	case EHexagonType::HE_Default:
-		return Hexagons_default;
-	default:
-		return nullptr;
-	}
-}
-
 void AHexGrid::ClearInstances() {
-	if(Hexagons_default) Hexagons_default->ClearInstances();
+	for (auto& Elem : HexagonContainers) {
+		Elem.Value->ClearInstances();
+	}
 }
 
 void AHexGrid::UpdateGrid() {
@@ -79,11 +78,18 @@ void AHexGrid::UpdateGrid() {
 
 		// If move to ground
 		Loc = Hex.Transform.GetLocation();
-		Loc.Z = CalculateZ(Loc.X + ActorLoc.X, Loc.Y + ActorLoc.Y, ActorLoc.Z + 1000, ActorLoc.Z - 1000) - ActorLoc.Z;
+		if (bStickToGround) {
+			Loc.Z = CalculateZ(
+				Loc.X + ActorLoc.X, 
+				Loc.Y + ActorLoc.Y, 
+				ActorLoc.Z + TraceDistanceUp, 
+				ActorLoc.Z - TraceDistanceDown
+			) - ActorLoc.Z + FlyHeight;
+		}
 		Hex.Transform.SetLocation(Loc);
 		// end if
 
-		Comp = GetHexMeshComponent(Hex.Type);
+		Comp = *HexagonContainers.Find((uint8)Hex.Type);
 		if (Comp == nullptr) continue;
 
 		Comp->AddInstance(Hex.Transform);
@@ -91,32 +97,6 @@ void AHexGrid::UpdateGrid() {
 		Hexagons[i] = Hex;
 	}
 }
-/*
-void AHexGrid::UpdateHexagon(int32 Index) {
-	if (Index < 0) return;
-
-	FHexagon Hex = Hexagons[Index];
-
-	// If move to ground
-	const FVector ActorLoc = this->GetActorLocation();
-	FVector Loc = Hex.Transform.GetLocation();
-	Loc.Z = CalculateZ(Loc.X + ActorLoc.X, Loc.Y + ActorLoc.Y, ActorLoc.Z + 1000, ActorLoc.Z - 1000) - ActorLoc.Z;
-	Hex.Transform.SetLocation(Loc);
-	// end if
-
-	UInstancedStaticMeshComponent* Comp = GetHexMeshComponent(Hex.Type);
-	if (Comp == nullptr) return;
-
-	if (Hex.ArrayIndex < 0) {
-		Hex.ArrayIndex = Comp->AddInstance(Hex.Transform);
-	}
-	else {
-		Comp->UpdateInstanceTransform(Hex.ArrayIndex, Hex.Transform);
-	}
-
-	Hexagons[Index] = Hex;
-}
-*/
 
 float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 
@@ -149,8 +129,6 @@ float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 
 void AHexGrid::AddHexagon(FHexagon Hexagon) {
 	Hexagons.Add(Hexagon);
-	//UpdateHexagon(Hexagons.Add(Hexagon));
-	//UpdateGrid();
 }
 
 void AHexGrid::GetHexagon(FHexagon& Hex, int32 Index) {
@@ -159,28 +137,14 @@ void AHexGrid::GetHexagon(FHexagon& Hex, int32 Index) {
 
 void AHexGrid::RemoveHexagon(int32 Index) {
 	Hexagons.RemoveAt(Index);
-	/*
-	FHexagon Hex = Hexagons[Index];
-	if (Hex.ArrayIndex < 0) return;
-	UInstancedStaticMeshComponent* Comp = GetHexMeshComponent(Hex.Type);
-	if (Comp == nullptr) return;
-	Comp->RemoveInstance(Hex.ArrayIndex);*/
-	//UpdateGrid();
 }
 
-void AHexGrid::EditHexagon(int32 Index, FHexagon& Hexagon) {
+void AHexGrid::EditHexagon(int32 Index, FHexagon Hexagon) {
 	Hexagons[Index] = Hexagon;
-	//UpdateHexagon(Index);
-	//UpdateGrid();
 }
 
 void AHexGrid::ClearHexagons() {
 	Hexagons.Empty();
-	//UpdateGrid();
-}
-
-void AHexGrid::UFunction_UpdateGrid() {
-	UpdateGrid();
 }
 
 void AHexGrid::PostInitProperties() {
@@ -188,45 +152,20 @@ void AHexGrid::PostInitProperties() {
 	UpdateGrid();
 }
 
-// Editor
-
 #if WITH_EDITOR
 
 void AHexGrid::PostEditChangeChainProperty(FPropertyChangedChainEvent & Event) {
-
-	/*
-	if(Event.MemberProperty->GetName().Equals("Hexagons"))
-	{
-		switch (Event.ChangeType) {
-
-		case EPropertyChangeType::ValueSet:
-		case EPropertyChangeType::ArrayAdd: {
-
-			int32 index = Event.GetArrayIndex(TEXT("Hexagons"));
-			UE_LOG(LogClass, Log, TEXT("PropertyChain index %d"), index);
-			UpdateHexagon(index);
-		} break;
-
-		default:
-			ClearGrid();
-			UpdateGrid();
-			break;
-		}
-	}
-	*/
-
 	UpdateGrid();
-
 	Super::PostEditChangeChainProperty(Event);
 }
 
-/*
-void AHexGrid::PostEditChangeProperty(FPropertyChangedEvent & Evt) {
+void AHexGrid::PostEditChangeProperty(FPropertyChangedEvent & Event) {
 	UpdateGrid();
+	Super::PostEditChangeProperty(Event);
 }
-*/
 
 void AHexGrid::PostEditMove(bool bFinished) {
 	UpdateGrid();
+	Super::PostEditMove(bFinished);
 }
 #endif

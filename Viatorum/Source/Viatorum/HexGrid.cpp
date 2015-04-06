@@ -148,8 +148,8 @@ void AHexGrid::ClearHexagons() {
 }
 
 void AHexGrid::PostInitProperties() {
-	Super::PostInitProperties();
 	UpdateGrid();
+	Super::PostInitProperties();
 }
 
 #if WITH_EDITOR

@@ -8,9 +8,9 @@ public class Viatorum : ModuleRules
 	{
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "RHI", "RenderCore", "ShaderCore" });
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "CustomMeshComponent" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "Landscape" });
 
-        PrivateIncludePathModuleNames.AddRange(new string[] { "CustomMeshComponent" });
+        PrivateIncludePathModuleNames.AddRange(new string[] { "Landscape" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

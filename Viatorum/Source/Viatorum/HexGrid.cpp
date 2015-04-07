@@ -2,6 +2,7 @@
 
 #include "Viatorum.h"
 #include "HexGrid.h"
+#include "Landscape.h"
 
 
 FHexagon::FHexagon():
@@ -133,22 +134,27 @@ float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 	RV_TraceParams.bTraceAsyncScene = true;
 	RV_TraceParams.bReturnPhysicalMaterial = false;
 
-	FHitResult RV_Hit(ForceInit);
+	FCollisionResponseParams RV_ObjectParams = FCollisionResponseParams::DefaultResponseParam;
 
-	GetWorld()->LineTraceSingle(
+	TArray<FHitResult> RV_Hit;
+
+	GetWorld()->LineTraceMulti(
 		RV_Hit,
 		Start,
 		End,
 		ECC_WorldStatic,
-		RV_TraceParams
-		);
+		RV_TraceParams,
+		RV_ObjectParams
+	);
 
-	if (RV_Hit.bBlockingHit) {
-		return RV_Hit.ImpactPoint.Z;
+	FHitResult hr;
+	for (int32 i = 0; i < RV_Hit.Num(); i++) {
+		hr = RV_Hit[i];
+		if (Cast<ALandscape>(hr.Actor.Get())) {
+			return hr.ImpactPoint.Z;
+		}
 	}
-	else {
-		return (z_end + z_start) / 2.f;
-	}
+	return (z_end + z_start) / 2.f;
 }
 /*
 void AHexGrid::AddHexagon(FHexagon Hexagon) {

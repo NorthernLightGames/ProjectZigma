@@ -12,6 +12,17 @@ ABackman::ABackman()
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
+	//defaults
+	CharacterMovement->DefaultLandMovementMode = EMovementMode::MOVE_Walking;
+	CharacterMovement->DefaultWaterMovementMode = EMovementMode::MOVE_Falling;
+
+	//air control
+	CharacterMovement->AirControl = 0.7;
+
+	//Set movement to falling on spawn
+	CharacterMovement->SetMovementMode(EMovementMode::MOVE_Falling);
+
+
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
 	Camera->AttachTo(RootComponent);

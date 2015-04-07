@@ -12,6 +12,7 @@ enum class EHexagonType : uint8 {
 	// Add more later on
 };
 
+
 USTRUCT(BlueprintType)
 struct FHexagon {
 
@@ -28,15 +29,11 @@ struct FHexagon {
 	FHexagon(FTransform & Transform, EHexagonType Type);
 };
 
+
 UCLASS()
 class VIATORUM_API AHexGrid : public AActor
 {
 	GENERATED_BODY()
-	
-protected:
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Hexagon Grid")
-	TArray<FHexagon> Hexagons;
 
 public:
 
@@ -65,38 +62,21 @@ public:
 
 #if WITH_EDITOR
 
-	virtual void PostEditChangeChainProperty(FPropertyChangedChainEvent & Event) override;
-
 	virtual void PostEditMove(bool bFinished) override;
 
-	virtual void PostEditChangeProperty(FPropertyChangedEvent & Event) override;
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& Event) override;
 
 #endif
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
-	void AddHexagon(FHexagon Hex);
-
-	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
-	void GetHexagon(FHexagon& Hex, int32 Index);
-
-	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
-	void RemoveHexagon(int32 Index);
-
-	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
-	void EditHexagon(int32 Index, FHexagon Hex);
-
-	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
-	void ClearHexagons();
-
-	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
 	void UpdateGrid();
+
+	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
+	UInstancedStaticMeshComponent* GetHexagonContainer(EHexagonType Type);
 
 private:
 
 	float CalculateZ(float X, float Y, float Z_start, float Z_end);
 
 	TMap<uint8, UInstancedStaticMeshComponent*> HexagonContainers;
-
-	void ClearInstances();
-	
 };

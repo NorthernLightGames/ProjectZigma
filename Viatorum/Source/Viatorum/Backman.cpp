@@ -12,16 +12,22 @@ ABackman::ABackman()
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
-	//defaults
-	CharacterMovement->DefaultLandMovementMode = EMovementMode::MOVE_Walking;
-	CharacterMovement->DefaultWaterMovementMode = EMovementMode::MOVE_Falling;
+	UCharacterMovementComponent *CharacterMovement = this->GetCharacterMovement();
+	if (CharacterMovement) {
 
-	//air control
-	CharacterMovement->AirControl = 0.7;
+		//defaults
+		CharacterMovement->DefaultLandMovementMode = EMovementMode::MOVE_Walking;
+		CharacterMovement->DefaultWaterMovementMode = EMovementMode::MOVE_Falling;
 
-	//Set movement to falling on spawn
-	CharacterMovement->SetMovementMode(EMovementMode::MOVE_Falling);
+		//air control
+		CharacterMovement->AirControl = 0.7;
 
+		//Set movement to falling on spawn
+		CharacterMovement->SetMovementMode(EMovementMode::MOVE_Falling);
+
+		CharacterMovement->GravityScale = 1.f;
+
+	}
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
@@ -32,7 +38,10 @@ ABackman::ABackman()
 void ABackman::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("MrZigma says: Hi!"));
+	}
 }
 
 // Called every frame
@@ -58,6 +67,8 @@ void ABackman::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 
 
 void ABackman::MoveForward(float Val) {
+	UCharacterMovementComponent *CharacterMovement = this->GetCharacterMovement();
+	if (!CharacterMovement) return;
 	if ((Controller != NULL) && (Val != 0.0f)) {
 		// find out which way is forward
 		FRotator Rotation = Controller->GetControlRotation();
@@ -72,6 +83,8 @@ void ABackman::MoveForward(float Val) {
 }
 
 void ABackman::MoveRight(float Val) {
+	UCharacterMovementComponent *CharacterMovement = this->GetCharacterMovement();
+	if (!CharacterMovement) return;
 	if ((Controller != NULL) && (Val != 0.0f)) {
 		// find out which way is forward
 		FRotator Rotation = Controller->GetControlRotation();
@@ -86,9 +99,9 @@ void ABackman::MoveRight(float Val) {
 }
 
 void ABackman::BeginJump() {
-	bPressedJump = true;
+	Jump();
 }
 
 void ABackman::EndJump() {
-	bPressedJump = false;
+	StopJumping();
 }

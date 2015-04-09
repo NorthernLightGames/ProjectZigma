@@ -2,7 +2,6 @@
 
 #include "Viatorum.h"
 #include "HexGrid.h"
-#include "Landscape.h"
 
 
 FHexagon::FHexagon():
@@ -34,7 +33,7 @@ TraceDistanceDown(2000.f)
 
 	// Default hexagons component
 
-	UStaticMesh* HexagonMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/Models/HexMesh")).Object;
+	UStaticMesh* HexagonMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/HexGrid/Meshes/HexMesh")).Object;
 
 	UInstancedStaticMeshComponent* HexagonContainer;
 
@@ -125,57 +124,26 @@ void AHexGrid::UpdateGrid() {
 
 float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 
-	FVector Start(x, y, z_start);
-	FVector End(x, y, z_end);
+	const float default_ret = (z_end + z_start) / 2.f;
 
-	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(FName(TEXT("RV_Trace")), true, this);
+	FVector rayStart(x, y, z_start);
+	FVector rayEnd(x, y, z_end);
+	UWorld* world = GetWorld();
+	if (!world) return default_ret;
 
-	RV_TraceParams.bTraceComplex = true;
-	RV_TraceParams.bTraceAsyncScene = true;
-	RV_TraceParams.bReturnPhysicalMaterial = false;
+	TActorIterator<ALandscape> landscapeIterator(world);
+	ALandscape* landscape = *landscapeIterator;
+	if (!landscape) return default_ret;
 
-	FCollisionResponseParams RV_ObjectParams = FCollisionResponseParams::DefaultResponseParam;
+	FCollisionQueryParams collisionParams(FName(TEXT("FoliageClusterPlacementTrace")), true, this);
+	collisionParams.bReturnPhysicalMaterial = true;
 
-	TArray<FHitResult> RV_Hit;
-
-	GetWorld()->LineTraceMulti(
-		RV_Hit,
-		Start,
-		End,
-		ECC_WorldStatic,
-		RV_TraceParams,
-		RV_ObjectParams
-	);
-
-	FHitResult hr;
-	for (int32 i = 0; i < RV_Hit.Num(); i++) {
-		hr = RV_Hit[i];
-		if (Cast<ALandscape>(hr.Actor.Get())) {
-			return hr.ImpactPoint.Z;
-		}
+	FHitResult hit(ForceInit);
+	if (landscape->ActorLineTraceSingle(hit, rayStart, rayEnd, ECC_Visibility, collisionParams)) {
+		return hit.ImpactPoint.Z;
 	}
-	return (z_end + z_start) / 2.f;
+	else return default_ret;
 }
-/*
-void AHexGrid::AddHexagon(FHexagon Hexagon) {
-	Hexagons.Add(Hexagon);
-}
-
-void AHexGrid::GetHexagon(FHexagon& Hex, int32 Index) {
-	Hex = Hexagons[Index];
-}
-
-void AHexGrid::RemoveHexagon(int32 Index) {
-	Hexagons.RemoveAt(Index);
-}
-
-void AHexGrid::EditHexagon(int32 Index, FHexagon Hexagon) {
-	Hexagons[Index] = Hexagon;
-}
-void AHexGrid::ClearHexagons() {
-	Hexagons.Empty();
-}
-*/
 
 UInstancedStaticMeshComponent* AHexGrid::GetHexagonContainer(EHexagonType Type) {
 	return *HexagonContainers.Find((uint8)Type);
@@ -187,12 +155,6 @@ void AHexGrid::PostInitProperties() {
 }
 
 #if WITH_EDITOR
-/*
-void AHexGrid::PostEditChangeChainProperty(FPropertyChangedChainEvent & Event) {
-	UpdateGrid();
-	Super::PostEditChangeChainProperty(Event);
-}
-*/
 
 void AHexGrid::PostEditChangeProperty(FPropertyChangedEvent & Event) {
 	UpdateGrid();

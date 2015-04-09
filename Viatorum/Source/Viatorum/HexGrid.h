@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Landscape.h"
 #include "HexGrid.generated.h"
 
 

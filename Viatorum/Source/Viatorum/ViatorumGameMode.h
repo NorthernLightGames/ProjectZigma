@@ -12,8 +12,7 @@ UCLASS()
 class VIATORUM_API AViatorumGameMode : public AGameMode
 {
 	GENERATED_BODY()
-	
-	
-	
+
+	virtual void StartPlay() override;
 	
 };

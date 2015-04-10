@@ -32,6 +32,8 @@ ABackman::ABackman()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
 	Camera->AttachTo(RootComponent);
+
+	Camera->bUsePawnControlRotation = true;
 }
 
 // Called when the game starts or when spawned
@@ -48,9 +50,6 @@ void ABackman::BeginPlay()
 void ABackman::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-	if (CharacterMovement->IsFalling()) {
-		
-	}
 }
 
 // Called to bind functionality to input
@@ -73,9 +72,11 @@ void ABackman::MoveForward(float Val) {
 		// find out which way is forward
 		FRotator Rotation = Controller->GetControlRotation();
 		// Limit pitch when walking or falling
+		/*
 		if (CharacterMovement->IsMovingOnGround() || CharacterMovement->IsFalling()) {
 			Rotation.Pitch = 0.0f;
 		}
+		*/
 		// add movement in that direction
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
 		AddMovementInput(Direction, Val);
@@ -89,9 +90,11 @@ void ABackman::MoveRight(float Val) {
 		// find out which way is forward
 		FRotator Rotation = Controller->GetControlRotation();
 		// Limit pitch when walking or falling
+		/*
 		if (CharacterMovement->IsMovingOnGround() || CharacterMovement->IsFalling()) {
 			Rotation.Pitch = 0.0f;
 		}
+		*/
 		// add movement in that direction
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
 		AddMovementInput(Direction, Val);

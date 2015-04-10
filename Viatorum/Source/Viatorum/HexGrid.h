@@ -9,27 +9,10 @@
 
 UENUM(BlueprintType)
 enum class EHexagonType : uint8 {
-	HE_Default UMETA(DisplayName = "Default")
-	// Add more later on
+	HE_Default UMETA(DisplayName = "Default"),
+	HE_Algae UMETA(DisplayName = "Algae overgrown")
+
 };
-
-
-USTRUCT(BlueprintType)
-struct FHexagon {
-
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon")
-	FTransform Transform;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon")
-	EHexagonType Type;
-
-	FHexagon();
-
-	FHexagon(FTransform & Transform, EHexagonType Type);
-};
-
 
 UCLASS()
 class VIATORUM_API AHexGrid : public AActor
@@ -50,16 +33,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon Grid", meta = (UIMin = -10000.f, UIMax = 10000.f))
 		float FlyHeight;
 
-	// Sets default values for this actor's properties
 	AHexGrid();
 
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
-
-	virtual void PostInitProperties() override;
 
 #if WITH_EDITOR
 
@@ -76,6 +54,13 @@ public:
 	UInstancedStaticMeshComponent* GetHexagonContainer(EHexagonType Type);
 
 private:
+
+	template<typename T>
+	FORCEINLINE T* FindObject(FName name);
+
+	UMaterialInstance* MakeDynamicInstance(UMaterial* Material);
+
+	UInstancedStaticMeshComponent* AddHexagonContainer(EHexagonType type, FName name, UStaticMesh* Mesh, TArray<UMaterialInterface*>& Materials);
 
 	float CalculateZ(float X, float Y, float Z_start, float Z_end);
 

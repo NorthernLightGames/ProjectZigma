@@ -43,7 +43,12 @@ void AHexGridRect::GenerateGrid() {
 #ifdef WITH_EDITOR
 
 void AHexGridRect::PostEditChangeProperty(FPropertyChangedEvent & Event) {
-	GenerateGrid();
+	if (Event.Property->GetName().Equals("XSize") || Event.Property->GetName().Equals("YSize") ||
+		Event.Property->GetName().Equals("XSize") || Event.Property->GetName().Equals("XSize"))
+	{
+		GenerateGrid();
+	}
+
 	Super::PostEditChangeProperty(Event);
 }
 

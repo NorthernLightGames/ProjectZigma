@@ -11,18 +11,17 @@ XSize(20),
 YSize(20),
 XScale(173.f),
 YScale(200.f) {
-	GenerateGrid();
-	UpdateGrid();
+
 }
 
-void AHexGridRect::GenerateGrid() {
+void AHexGridRect::ConstructGrid() {
 
 	const float XScale = this->XScale;
 	const float YScale = this->YScale;
 	const int32 XSize = this->XSize;
 	const int32 YSize = this->YSize;
 
-	UInstancedStaticMeshComponent* Comp = GetHexagonContainer(EHexagonType::HE_Default);
+	UInstancedStaticMeshComponent* Comp = GetHexagonContainerFromType(EHexagonType::HE_Default);
 	if (!Comp) return;
 	Comp->ClearInstances();
 
@@ -40,13 +39,16 @@ void AHexGridRect::GenerateGrid() {
 	}
 }
 
+
+
 #ifdef WITH_EDITOR
 
 void AHexGridRect::PostEditChangeProperty(FPropertyChangedEvent & Event) {
-	if (Event.Property->GetName().Equals("XSize") || Event.Property->GetName().Equals("YSize") ||
-		Event.Property->GetName().Equals("XSize") || Event.Property->GetName().Equals("XSize"))
-	{
-		GenerateGrid();
+	if (Event.Property) {
+		if (Event.Property->GetName().Equals("XSize") || Event.Property->GetName().Equals("YSize") ||
+			Event.Property->GetName().Equals("XSize") || Event.Property->GetName().Equals("XSize")) {
+			ConstructGrid();
+		}
 	}
 
 	Super::PostEditChangeProperty(Event);

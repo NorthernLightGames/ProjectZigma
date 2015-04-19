@@ -3,10 +3,13 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Landscape.h"
+#include "Runtime/Landscape/Classes/Landscape.h"
 #include "HexGrid.generated.h"
 
 
+/*
+ * Hexagon type enum
+ */
 UENUM(BlueprintType)
 enum class EHexagonType : uint8 {
 	HE_Default UMETA(DisplayName = "Default"),
@@ -14,6 +17,9 @@ enum class EHexagonType : uint8 {
 
 };
 
+/*
+ * Hexagon grid
+ */
 UCLASS()
 class VIATORUM_API AHexGrid : public AActor
 {
@@ -22,47 +28,59 @@ class VIATORUM_API AHexGrid : public AActor
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon Grid", meta = (UIMin = 100.f, UIMax = 100000.f, ClampMax = 10000.f))
-		float TraceDistanceDown;
+	float TraceDistanceDown;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon Grid", meta = (UIMin = 100.f, UIMax = 100000.f, ClampMax = 10000.f))
-		float TraceDistanceUp;
+	float TraceDistanceUp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon Grid", meta = (DisplayName = "Stick to ground"))
-		bool bStickToGround;
+	bool bStickToGround;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagon Grid", meta = (UIMin = -10000.f, UIMax = 10000.f))
-		float FlyHeight;
+	float FlyHeight;
 
-	AHexGrid();
+protected:
 
-	virtual void BeginPlay() override;
-	
-	virtual void Tick( float DeltaSeconds ) override;
+	UPROPERTY(VisibleAnywhere, Category = "Hexagon Grid" )
+	TArray<UInstancedStaticMeshComponent*> HexagonContainers;
 
-#if WITH_EDITOR
+	UPROPERTY()
+	bool bGridConstructed;
 
-	virtual void PostEditMove(bool bFinished) override;
+	bool bGridNeedsUpdate;
 
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& Event) override;
-
-#endif
+public:
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
 	void UpdateGrid();
 
-	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid")
-	UInstancedStaticMeshComponent* GetHexagonContainer(EHexagonType Type);
+	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid", meta = (DisplayName = "Get Hexagon Container by type"))
+	UInstancedStaticMeshComponent* GetHexagonContainerFromType(EHexagonType Type);
+
+	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid", meta = (DisplayName = "Get Hexagon Container"))
+	UInstancedStaticMeshComponent* GetHexagonContainer(int32 Index);
+
+	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid", meta = (DisplayName = "Get number of Hexagon Containers"))
+	int32 GetHexagonContainerCount();
+
+	AHexGrid();
+
+	virtual void BeginPlay() override;
+	virtual void Tick( float DeltaSeconds ) override;
+
+	virtual void PostInitProperties() override;
+
+#if WITH_EDITOR
+	virtual void PostEditMove(bool bFinished) override;
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& Event) override;
+#endif
+
+protected:
+
+	virtual void ConstructGrid();
 
 private:
 
-	template<typename T>
-	FORCEINLINE T* FindObject(FName name);
-
-	UMaterialInstance* MakeDynamicInstance(UMaterial* Material);
-
 	UInstancedStaticMeshComponent* AddHexagonContainer(EHexagonType type, FName name, UStaticMesh* Mesh, TArray<UMaterialInterface*>& Materials);
-
 	float CalculateZ(float X, float Y, float Z_start, float Z_end);
-
-	TMap<uint8, UInstancedStaticMeshComponent*> HexagonContainers;
 };

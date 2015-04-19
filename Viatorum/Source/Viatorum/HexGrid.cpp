@@ -9,7 +9,8 @@ AHexGrid::AHexGrid():
 bStickToGround(true),
 FlyHeight(10.f),
 TraceDistanceUp(1000.f),
-TraceDistanceDown(2000.f)
+TraceDistanceDown(2000.f),
+bGridConstructed(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -36,7 +37,7 @@ UInstancedStaticMeshComponent* AHexGrid::AddHexagonContainer
 		HexagonContainer->SetMaterial(i, Materials[i]);
 	}
 	HexagonContainer->AttachTo(RootComponent, TEXT("Algae overgrown hexagons"));
-	HexagonContainers.Add((uint8)type, HexagonContainer);
+	HexagonContainers.Add(HexagonContainer);
 	return HexagonContainer;
 }
 
@@ -50,6 +51,10 @@ void AHexGrid::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
+	if (bGridNeedsUpdate) {
+		UpdateGrid();
+		bGridNeedsUpdate = false;
+	}
 }
 
 void AHexGrid::UpdateGrid() {
@@ -58,8 +63,8 @@ void AHexGrid::UpdateGrid() {
 	FVector Loc;
 	FTransform transform;
 	UInstancedStaticMeshComponent* Comp;
-	for (auto& Elem : HexagonContainers) {
-		Comp = Elem.Value;
+	for (int32 i = 0; i < GetHexagonContainerCount(); i++) {
+		Comp = GetHexagonContainer(i);
 		for (int32 i = 0; i < Comp->GetInstanceCount(); i++) {
 			Comp->GetInstanceTransform(i, transform, true);
 
@@ -105,8 +110,29 @@ float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 	else return default_ret;
 }
 
-UInstancedStaticMeshComponent* AHexGrid::GetHexagonContainer(EHexagonType Type) {
-	return *HexagonContainers.Find((uint8)Type);
+void AHexGrid::PostInitProperties() {
+	Super::PostInitProperties();
+	if (!bGridConstructed) {
+		ConstructGrid();
+		bGridConstructed = true;
+	}
+	bGridNeedsUpdate = true;
+}
+
+UInstancedStaticMeshComponent* AHexGrid::GetHexagonContainerFromType(EHexagonType Type) {
+	return HexagonContainers[(int32)((uint8)Type)];
+}
+
+UInstancedStaticMeshComponent* AHexGrid::GetHexagonContainer(int32 Index) {
+	return HexagonContainers[Index];
+}
+
+int32 AHexGrid::GetHexagonContainerCount() {
+	return HexagonContainers.Num();
+}
+
+void AHexGrid::ConstructGrid() {
+
 }
 
 #if WITH_EDITOR

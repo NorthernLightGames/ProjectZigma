@@ -32,10 +32,9 @@ public:
 #ifdef WITH_EDITOR
 
 	virtual void PostEditChangeProperty(FPropertyChangedEvent & Event) override;
-
 #endif
 
-private:
+protected:
 
-	void GenerateGrid();
+	virtual void ConstructGrid() override;
 };

@@ -15,6 +15,7 @@ YScale(200.f) {
 }
 
 void AHexGridRect::ConstructGrid() {
+	Super::ConstructGrid();
 
 	const float XScale = this->XScale;
 	const float YScale = this->YScale;
@@ -23,7 +24,6 @@ void AHexGridRect::ConstructGrid() {
 
 	UInstancedStaticMeshComponent* Comp = GetHexagonContainerFromType(EHexagonType::HE_Default);
 	if (!Comp) return;
-	Comp->ClearInstances();
 
 	float x, y;
 	FTransform transform;

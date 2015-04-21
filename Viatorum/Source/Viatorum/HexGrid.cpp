@@ -132,7 +132,12 @@ int32 AHexGrid::GetHexagonContainerCount() {
 }
 
 void AHexGrid::ConstructGrid() {
-
+	UInstancedStaticMeshComponent* Comp;
+	for (int32 i = 0; i < GetHexagonContainerCount(); i++) {
+		Comp = GetHexagonContainer(i);
+		if (!Comp) continue;
+		Comp->ClearInstances();
+	}
 }
 
 #if WITH_EDITOR

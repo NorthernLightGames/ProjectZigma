@@ -1,17 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Viatorum.h"
-#include "HexGrid.h"
+#include "Hexagons.h"
 
 
 // Sets default values
-AHexGrid::AHexGrid():
+AHexagons::AHexagons():
 bStickToGround(true),
 FlyHeight(10.f),
 TraceDistanceUp(1000.f),
 TraceDistanceDown(2000.f),
-bGridConstructed(false)
-{
+ScaleX(173.f),
+ScaleY(200.f) {
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
@@ -20,16 +20,16 @@ bGridConstructed(false)
 	TArray<UMaterialInterface*> Materials;
 	UMaterial* Material;
 
-	AddHexagonContainer(EHexType::HTE_Default, TEXT("Default hexagons"), HexagonMesh, Materials);
+	AddHexagonContainer(EHexagonType::HE_Default, TEXT("Default hexagons"), HexagonMesh, Materials);
 
 	Material = ConstructorHelpers::FObjectFinder<UMaterial>(TEXT("/Game/HexGrid/Materials/HexagonAlgaeOvergrownMaterial")).Object;
 	Materials.Add(Material);
-	AddHexagonContainer(EHexType::HTE_Algae, TEXT("Algae overgrown hexagons"), HexagonMesh, Materials);
+	AddHexagonContainer(EHexagonType::HE_Algae, TEXT("Algae overgrown hexagons"), HexagonMesh, Materials);
 	Materials.Empty();
 }
 
-UInstancedStaticMeshComponent* AHexGrid::AddHexagonContainer
-(EHexType type, FName name, UStaticMesh* Mesh, TArray<UMaterialInterface*>& Materials) {
+UInstancedStaticMeshComponent* AHexagons::AddHexagonContainer
+(EHexagonType type, FName name, UStaticMesh* Mesh, TArray<UMaterialInterface*>& Materials) {
 
 	UInstancedStaticMeshComponent* HexagonContainer = CreateDefaultSubobject<UInstancedStaticMeshComponent>(name);
 	HexagonContainer->SetStaticMesh(Mesh);
@@ -37,27 +37,19 @@ UInstancedStaticMeshComponent* AHexGrid::AddHexagonContainer
 		HexagonContainer->SetMaterial(i, Materials[i]);
 	}
 	HexagonContainer->AttachTo(RootComponent, TEXT("Algae overgrown hexagons"));
-	HexagonContainers.Add(HexagonContainer);
+	HContainers.Add(HexagonContainer);
 	return HexagonContainer;
 }
 
-void AHexGrid::BeginPlay()
-{
+void AHexagons::BeginPlay() {
 	Super::BeginPlay();
-	UpdateGrid();
 }
 
-void AHexGrid::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
-
-	if (bGridNeedsUpdate) {
-		UpdateGrid();
-		bGridNeedsUpdate = false;
-	}
+void AHexagons::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
 }
 
-void AHexGrid::UpdateGrid() {
+void AHexagons::UpdateGrid() {
 
 	const FVector ActorLoc = this->GetActorLocation();
 
@@ -76,7 +68,7 @@ void AHexGrid::UpdateGrid() {
 					Loc.Y,
 					ActorLoc.Z + TraceDistanceUp,
 					ActorLoc.Z - TraceDistanceDown
-				) + FlyHeight;
+					) + FlyHeight;
 				transform.SetLocation(Loc);
 			}
 
@@ -85,7 +77,7 @@ void AHexGrid::UpdateGrid() {
 	}
 }
 
-float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
+float AHexagons::CalculateZ(float x, float y, float z_start, float z_end) {
 
 	const float default_ret = (z_end + z_start) / 2.f;
 
@@ -97,6 +89,7 @@ float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 
 	TActorIterator<ALandscape> landscapeIterator(world);
 	if (!landscapeIterator) return default_ret;
+
 	ALandscape* landscape = *landscapeIterator;
 	if (!landscape) return default_ret;
 	if (!landscape->IsValidLowLevel()) return default_ret;
@@ -111,50 +104,45 @@ float AHexGrid::CalculateZ(float x, float y, float z_start, float z_end) {
 	else return default_ret;
 }
 
-void AHexGrid::PostInitProperties() {
-	Super::PostInitProperties();
-	if (!bGridConstructed) {
-		ConstructGrid();
-		bGridConstructed = true;
-	}
-	bGridNeedsUpdate = true;
+UInstancedStaticMeshComponent* AHexagons::GetHexagonContainerFromType(EHexagonType Type) {
+	return HContainers[(int32)((uint8)Type)];
 }
 
-UInstancedStaticMeshComponent* AHexGrid::GetHexagonContainerFromType(EHexType Type) {
-	return HexagonContainers[(int32)((uint8)Type)];
+UInstancedStaticMeshComponent* AHexagons::GetHexagonContainer(int32 Index) {
+	return HContainers[Index];
 }
 
-UInstancedStaticMeshComponent* AHexGrid::GetHexagonContainer(int32 Index) {
-	return HexagonContainers[Index];
+int32 AHexagons::GetHexagonContainerCount() {
+	return HContainers.Num();
 }
 
-int32 AHexGrid::GetHexagonContainerCount() {
-	return HexagonContainers.Num();
-}
-
-void AHexGrid::ConstructGrid() {
+void AHexagons::SetHexagons(const TArray<FHexagon>& Hexagons) {
 	UInstancedStaticMeshComponent* Comp;
+	FVector Location(0, 0, 0);
+	FHexagon Hex;
+
+	// Clear old hexagons
 	for (int32 i = 0; i < GetHexagonContainerCount(); i++) {
 		Comp = GetHexagonContainer(i);
 		if (!Comp) continue;
 		Comp->ClearInstances();
 	}
-}
 
-#if WITH_EDITOR
+	// Add new hexagons
+	for (int32 i = 0; i < Hexagons.Num(); i++) {
+		Hex = Hexagons[i];
+		Comp = GetHexagonContainerFromType(Hex.Type);
+		if (Comp == nullptr) continue;
 
-void AHexGrid::PostEditUndo() {
-	bGridNeedsUpdate = true;
-	Super::PostEditUndo();
-}
+		HexToSpace(Hex.X, Hex.Y, Location);
 
-void AHexGrid::PostEditChangeProperty(FPropertyChangedEvent & Event) {
+		Comp->AddInstance(FTransform(Location));
+	}
+
 	UpdateGrid();
-	Super::PostEditChangeProperty(Event);
 }
 
-void AHexGrid::PostEditMove(bool bFinished) {
-	UpdateGrid();
-	Super::PostEditMove(bFinished);
+void AHexagons::HexToSpace(int32 X, int32 Y, FVector& result) {
+	result.X = (X + (Y % 2)*0.5)*ScaleX;
+	result.Y = (Y * 0.75)*ScaleY;
 }
-#endif

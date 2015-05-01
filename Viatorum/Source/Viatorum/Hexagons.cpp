@@ -10,19 +10,18 @@ bStickToGround(true),
 FlyHeight(10.f),
 TraceDistanceUp(1000.f),
 TraceDistanceDown(2000.f),
-ScaleX(173.f),
-ScaleY(200.f) {
+Scale(200.f) {
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
 
-	UStaticMesh* HexagonMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/HexGrid/Meshes/Hexagon")).Object;
+	UStaticMesh* HexagonMesh = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/Sigma/HexGrid/Meshes/Hexagon")).Object;
 	TArray<UMaterialInterface*> Materials;
 	UMaterial* Material;
 
 	AddHexagonContainer(EHexagonType::HE_Default, TEXT("Default hexagons"), HexagonMesh, Materials);
 
-	Material = ConstructorHelpers::FObjectFinder<UMaterial>(TEXT("/Game/HexGrid/Materials/HexagonAlgaeOvergrownMaterial")).Object;
+	Material = ConstructorHelpers::FObjectFinder<UMaterial>(TEXT("/Game/Sigma/HexGrid/Materials/HexagonAlgaeOvergrownMaterial")).Object;
 	Materials.Add(Material);
 	AddHexagonContainer(EHexagonType::HE_Algae, TEXT("Algae overgrown hexagons"), HexagonMesh, Materials);
 	Materials.Empty();
@@ -36,7 +35,7 @@ UInstancedStaticMeshComponent* AHexagons::AddHexagonContainer
 	for (int32 i = 0; i < Materials.Num(); i++) {
 		HexagonContainer->SetMaterial(i, Materials[i]);
 	}
-	HexagonContainer->AttachTo(RootComponent, TEXT("Algae overgrown hexagons"));
+	HexagonContainer->AttachTo(RootComponent, name);
 	HContainers.Add(HexagonContainer);
 	return HexagonContainer;
 }
@@ -143,6 +142,8 @@ void AHexagons::SetHexagons(const TArray<FHexagon>& Hexagons) {
 }
 
 void AHexagons::HexToSpace(int32 X, int32 Y, FVector& result) {
+	const float ScaleY = Scale;
+	const float ScaleX = FMath::Sin(60.f * (PI / 180.f)) * Scale;
 	result.X = (X + (Y % 2)*0.5)*ScaleX;
 	result.Y = (Y * 0.75)*ScaleY;
 }

@@ -59,10 +59,7 @@ public:
 	float FlyHeight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagons")
-	float ScaleX;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hexagons")
-	float ScaleY;
+	float Scale;
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagons")
 	void UpdateGrid();

@@ -22,7 +22,7 @@ void AHexGridRect::ConstructGrid() {
 	const int32 XSize = this->XSize;
 	const int32 YSize = this->YSize;
 
-	UInstancedStaticMeshComponent* Comp = GetHexagonContainerFromType(EHexagonType::HE_Default);
+	UInstancedStaticMeshComponent* Comp = GetHexagonContainerFromType(EHexType::HTE_Default);
 	if (!Comp) return;
 
 	float x, y;

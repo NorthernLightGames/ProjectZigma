@@ -36,5 +36,6 @@ public:
 
 protected:
 
+
 	virtual void ConstructGrid() override;
 };

@@ -11,9 +11,9 @@
  * Hexagon type enum
  */
 UENUM(BlueprintType)
-enum class EHexagonType : uint8 {
-	HE_Default UMETA(DisplayName = "Default"),
-	HE_Algae UMETA(DisplayName = "Algae overgrown")
+enum class EHexType : uint8 {
+	HTE_Default UMETA(DisplayName = "Default"),
+	HTE_Algae UMETA(DisplayName = "Algae overgrown")
 
 };
 
@@ -55,7 +55,7 @@ public:
 	void UpdateGrid();
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid", meta = (DisplayName = "Get Hexagon Container by type"))
-	UInstancedStaticMeshComponent* GetHexagonContainerFromType(EHexagonType Type);
+	UInstancedStaticMeshComponent* GetHexagonContainerFromType(EHexType Type);
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagon Grid", meta = (DisplayName = "Get Hexagon Container"))
 	UInstancedStaticMeshComponent* GetHexagonContainer(int32 Index);
@@ -71,6 +71,7 @@ public:
 	virtual void PostInitProperties() override;
 
 #if WITH_EDITOR
+	virtual void PostEditUndo() override;
 	virtual void PostEditMove(bool bFinished) override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& Event) override;
 #endif
@@ -81,6 +82,6 @@ protected:
 
 private:
 
-	UInstancedStaticMeshComponent* AddHexagonContainer(EHexagonType type, FName name, UStaticMesh* Mesh, TArray<UMaterialInterface*>& Materials);
+	UInstancedStaticMeshComponent* AddHexagonContainer(EHexType type, FName name, UStaticMesh* Mesh, TArray<UMaterialInterface*>& Materials);
 	float CalculateZ(float X, float Y, float Z_start, float Z_end);
 };

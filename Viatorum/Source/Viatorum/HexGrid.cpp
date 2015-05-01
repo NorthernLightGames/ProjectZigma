@@ -20,16 +20,16 @@ bGridConstructed(false)
 	TArray<UMaterialInterface*> Materials;
 	UMaterial* Material;
 
-	AddHexagonContainer(EHexagonType::HE_Default, TEXT("Default hexagons"), HexagonMesh, Materials);
+	AddHexagonContainer(EHexType::HTE_Default, TEXT("Default hexagons"), HexagonMesh, Materials);
 
 	Material = ConstructorHelpers::FObjectFinder<UMaterial>(TEXT("/Game/HexGrid/Materials/HexagonAlgaeOvergrownMaterial")).Object;
 	Materials.Add(Material);
-	AddHexagonContainer(EHexagonType::HE_Algae, TEXT("Algae overgrown hexagons"), HexagonMesh, Materials);
+	AddHexagonContainer(EHexType::HTE_Algae, TEXT("Algae overgrown hexagons"), HexagonMesh, Materials);
 	Materials.Empty();
 }
 
 UInstancedStaticMeshComponent* AHexGrid::AddHexagonContainer
-(EHexagonType type, FName name, UStaticMesh* Mesh, TArray<UMaterialInterface*>& Materials) {
+(EHexType type, FName name, UStaticMesh* Mesh, TArray<UMaterialInterface*>& Materials) {
 
 	UInstancedStaticMeshComponent* HexagonContainer = CreateDefaultSubobject<UInstancedStaticMeshComponent>(name);
 	HexagonContainer->SetStaticMesh(Mesh);
@@ -58,6 +58,7 @@ void AHexGrid::Tick( float DeltaTime )
 }
 
 void AHexGrid::UpdateGrid() {
+
 	const FVector ActorLoc = this->GetActorLocation();
 
 	FVector Loc;
@@ -119,7 +120,7 @@ void AHexGrid::PostInitProperties() {
 	bGridNeedsUpdate = true;
 }
 
-UInstancedStaticMeshComponent* AHexGrid::GetHexagonContainerFromType(EHexagonType Type) {
+UInstancedStaticMeshComponent* AHexGrid::GetHexagonContainerFromType(EHexType Type) {
 	return HexagonContainers[(int32)((uint8)Type)];
 }
 
@@ -142,13 +143,18 @@ void AHexGrid::ConstructGrid() {
 
 #if WITH_EDITOR
 
+void AHexGrid::PostEditUndo() {
+	bGridNeedsUpdate = true;
+	Super::PostEditUndo();
+}
+
 void AHexGrid::PostEditChangeProperty(FPropertyChangedEvent & Event) {
-	Super::PostEditChangeProperty(Event);
 	UpdateGrid();
+	Super::PostEditChangeProperty(Event);
 }
 
 void AHexGrid::PostEditMove(bool bFinished) {
-	Super::PostEditMove(bFinished);
 	UpdateGrid();
+	Super::PostEditMove(bFinished);
 }
 #endif

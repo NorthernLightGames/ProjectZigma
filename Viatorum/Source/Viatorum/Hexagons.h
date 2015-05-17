@@ -72,7 +72,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Hexagons", meta = (DisplayName = "Get number of Hexagon Containers"))
 	int32 GetHexagonContainerCount();
-
+	/*
+	UFUNCTION(BlueprintImplementableEvent)
+	virtual FVector PositionHexagon(const FHexagon& Hexagon);
+	*/
 	/*
 	 Sets the hexagons and updates the grid.
 	*/

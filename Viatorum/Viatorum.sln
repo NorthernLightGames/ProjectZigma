@@ -1,0 +1,94 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+<<<<<<< HEAD
+# Visual Studio 2013
+# UnrealEngineGeneratedSolutionVersion=1.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{157079E0-CD26-499B-8782-D0896C89C7FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{8427765B-87FF-4DD4-BC4D-F95625D0A72D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE4", "Intermediate\ProjectFiles\UE4.vcxproj", "{24E692F8-12ED-47EC-9340-D37A881B6B44}"
+=======
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{6B655A0F-5B38-4C69-8006-F7CCA3A7BADE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{3D616185-1F81-403C-A4D2-32D5B5170A0D}"
+>>>>>>> origin/master
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Viatorum", "Intermediate\ProjectFiles\Viatorum.vcxproj", "{919AD908-5F87-43F6-8336-85ABE7A95358}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Viatorum", "Intermediate\ProjectFiles\Viatorum.vcxproj", "{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		DebugGame Editor|Win32 = DebugGame Editor|Win32
+		DebugGame Editor|Win64 = DebugGame Editor|Win64
+		DebugGame|Win32 = DebugGame|Win32
+		DebugGame|Win64 = DebugGame|Win64
+		Development Editor|Win32 = Development Editor|Win32
+		Development Editor|Win64 = Development Editor|Win64
+		Development|Win32 = Development|Win32
+		Development|Win64 = Development|Win64
+		Shipping|Win32 = Shipping|Win32
+		Shipping|Win64 = Shipping|Win64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+<<<<<<< HEAD
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.DebugGame Editor|Win32.ActiveCfg = DebugGame_Editor|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.DebugGame Editor|Win32.Build.0 = DebugGame_Editor|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.DebugGame Editor|Win64.ActiveCfg = DebugGame_Editor|x64
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.DebugGame Editor|Win64.Build.0 = DebugGame_Editor|x64
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.DebugGame|Win32.ActiveCfg = DebugGame_Game|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.DebugGame|Win32.Build.0 = DebugGame_Game|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.DebugGame|Win64.ActiveCfg = DebugGame_Game|x64
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.DebugGame|Win64.Build.0 = DebugGame_Game|x64
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Development Editor|Win32.ActiveCfg = Development_Editor|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Development Editor|Win32.Build.0 = Development_Editor|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Development Editor|Win64.ActiveCfg = Development_Editor|x64
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Development Editor|Win64.Build.0 = Development_Editor|x64
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Development|Win32.ActiveCfg = Development_Game|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Development|Win32.Build.0 = Development_Game|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Development|Win64.ActiveCfg = Development_Game|x64
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Development|Win64.Build.0 = Development_Game|x64
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Shipping|Win32.ActiveCfg = Shipping_Game|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Shipping|Win32.Build.0 = Shipping_Game|Win32
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Shipping|Win64.ActiveCfg = Shipping_Game|x64
+		{919AD908-5F87-43F6-8336-85ABE7A95358}.Shipping|Win64.Build.0 = Shipping_Game|x64
+=======
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.DebugGame Editor|Win32.ActiveCfg = DebugGame_Editor|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.DebugGame Editor|Win32.Build.0 = DebugGame_Editor|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.DebugGame Editor|Win64.ActiveCfg = DebugGame_Editor|x64
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.DebugGame Editor|Win64.Build.0 = DebugGame_Editor|x64
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.DebugGame|Win32.ActiveCfg = DebugGame_Game|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.DebugGame|Win32.Build.0 = DebugGame_Game|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.DebugGame|Win64.ActiveCfg = DebugGame_Game|x64
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.DebugGame|Win64.Build.0 = DebugGame_Game|x64
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Development Editor|Win32.ActiveCfg = Development_Editor|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Development Editor|Win32.Build.0 = Development_Editor|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Development Editor|Win64.ActiveCfg = Development_Editor|x64
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Development Editor|Win64.Build.0 = Development_Editor|x64
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Development|Win32.ActiveCfg = Development_Game|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Development|Win32.Build.0 = Development_Game|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Development|Win64.ActiveCfg = Development_Game|x64
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Development|Win64.Build.0 = Development_Game|x64
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Shipping|Win32.ActiveCfg = Shipping_Game|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Shipping|Win32.Build.0 = Shipping_Game|Win32
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Shipping|Win64.ActiveCfg = Shipping_Game|x64
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667}.Shipping|Win64.Build.0 = Shipping_Game|x64
+>>>>>>> origin/master
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+<<<<<<< HEAD
+		{24E692F8-12ED-47EC-9340-D37A881B6B44} = {157079E0-CD26-499B-8782-D0896C89C7FD}
+		{919AD908-5F87-43F6-8336-85ABE7A95358} = {8427765B-87FF-4DD4-BC4D-F95625D0A72D}
+=======
+		{84E80667-F9F2-4425-8925-17901DF72B76} = {6B655A0F-5B38-4C69-8006-F7CCA3A7BADE}
+		{0ABF5EB3-CDE8-440F-9736-DE883D1E2667} = {3D616185-1F81-403C-A4D2-32D5B5170A0D}
+>>>>>>> origin/master
+	EndGlobalSection
+EndGlobal
